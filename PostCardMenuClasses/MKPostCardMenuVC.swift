@@ -14,6 +14,13 @@ enum MKPostCardMenuAppearanceDirection {
 }
 typealias onComplitionType = (finished: Bool?) -> Void
 
+
+@objc protocol MKPostCardMenuVCDelegate: NSObjectProtocol {
+    optional func postCardMenuSlidingIn()
+    optional func postCardMenuSlidingOut()
+    optional func postCardMenu(menu: MKPostCardMenuVC, selectedButtonTag: Int)
+}
+
 class MKPostCardMenuVC: UIViewController {
 
     
@@ -64,6 +71,11 @@ class MKPostCardMenuVC: UIViewController {
     var fluidView: MKFixedFluidView?
     var menuWasOpenAtPanBegin: Bool?
     
+    // It must be set before at the time of assigning.
+    var imageArrayForButton: [String]?
+    
+    
+    
     //MARK:- PRIVATE PROPERTIES
     private var contentViewWidthWhenMenuIsOpen: CGFloat? = -1
     private var panGesture: UIPanGestureRecognizer?
@@ -106,7 +118,7 @@ class MKPostCardMenuVC: UIViewController {
         
         self.fluidView = MKFixedFluidView(frame: self.frameForFluidView())
         //self.fluidView.blurTintColor = UIColor.colorWithWhite(0.85, alpha: 1.0)
-        self.fluidView?.fillColor = UIColor(red: 51.0/255.0, green: 0.0/255.0, blue: 0.0/255.0, alpha: 1.0)
+        self.fluidView?.fillColor = UIColor(red: 182.0/255.0, green: 168.0/255.0, blue: 224.0/255.0, alpha: 1.0)
         self.fluidView?.hidden = false
         self.fluidView!.directionOfBouncing = .SurfaceTensionRightInward
         self.fluidView!.addGestureRecognizer(self.getTapGesture())
@@ -304,7 +316,6 @@ class MKPostCardMenuVC: UIViewController {
     func tapGestureTriggered(tapGesture: UITapGestureRecognizer) {
         if tapGesture.state == UIGestureRecognizerState.Ended {
             self.closeMenuAnimated(true, completion: nil)
-            self.fluidView?.toggleCurve(callback: nil)
         }
     }
     
@@ -376,80 +387,18 @@ class MKPostCardMenuVC: UIViewController {
         
         if panGesture.state == UIGestureRecognizerState.Ended {
             
-            self.fluidView!.touchEnded(controlPoint)
+            self.fluidView!.touchEnded(controlPoint, callback: { (finished) -> Void in
+                self.configurePanGesture()
+                
+                self.menuViewController!.view.frame = self.frameForMenuView()
+                self.view.addSubview(self.menuViewController!.view)
+            })
+            
+            // TODO: Animation for Menus
             
             
-            /*
             
-            var animationDuration: NSTimeInterval = 0.1
-            var changeState: Bool
-            if self.menuWasOpenAtPanBegin! {
-                changeState = blurDegree < 0.5
-                if !changeState {
-                    var velocity: CGPoint = panGesture.velocityInView(panGesture.view)
-                    if self.slideDirection == MKPostCardMenuAppearanceDirection.LeftToRight {
-                        changeState = (velocity.x < 0)
-                    }
-                    else {
-                        changeState = (velocity.x > 0)
-                    }
-                }
-            }
-            else {
-                changeState = blurDegree > 0.5
-            }
-            if changeState {
-                if self.menuWasOpenAtPanBegin! {
-                    UIView.animateWithDuration(animationDuration, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-                        self.menuViewController!.view.frame = self.frameForMenuViewDisappeared()
-                        
-                        }, completion: {(finished: Bool) in
-                            
-                            self.menuViewController!.endAppearanceTransition()
-                            //self.contentViewController.viewDidSlideIn(true, inSlideMenuController: self)
-                            self.showHideFluidView(false)
-                            self.configurePanGesture()
-                            self.tapGesture!.enabled = false
-                            
-                    })
-                }
-                else {
-                    //self.fluidView.forceUpdate(true, blurWithDegree: 1)
-                    self.menuViewController!.beginAppearanceTransition(false, animated: true)
-                    UIView.animateWithDuration(animationDuration, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-                        
-                        self.menuViewController!.view.frame = self.frameForMenuView()
-                        
-                        }, completion: {(finished: Bool) in
-                            self.menuViewController!.endAppearanceTransition()
-                            //self.contentViewController.viewDidSlideOut(true, inSlideMenuController: self)
-                            self.tapGesture!.enabled = true
-                            self.configurePanGesture()
-                            
-                    })
-                }
-            }
-            else {
-                if self.menuWasOpenAtPanBegin! {
-                    //self.fluidView.forceUpdate(true, blurWithDegree: 1)
-                    UIView.animateWithDuration(animationDuration, delay: 0, options: UIViewAnimationOptions.CurveEaseInOut, animations: {
-                        self.menuViewController!.view.frame = self.frameForMenuView()
-                        
-                        }, completion: {(finished: Bool) in
-                            self.menuViewController!.endAppearanceTransition()
-                            //self.contentViewController.viewDidSlideOut(true, inSlideMenuController: self)
-                            self.tapGesture!.enabled = true
-                            self.configurePanGesture()
-                            
-                    })
-                }
-                else {
-                    self.menuViewController!.view.frame = self.frameForMenuViewDisappeared()
-                    self.showHideFluidView(false)
-                    self.configurePanGesture()
-                }
-            }
-            */
+            
         }
     }
     

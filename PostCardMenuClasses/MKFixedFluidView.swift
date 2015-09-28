@@ -46,11 +46,11 @@ class MKFixedFluidView: MKFluidView {
     }
     
     // touch End
-    func touchEnded(touchPoint: CGPoint) {
+    func touchEnded(touchPoint: CGPoint, callback onComplition:((Void) -> Void )?) {
         if !isOpen! && !isTogglePressed! {
             println("touchEnded \(destinationPoint!)")
             
-            super.movingTouchRecognizer( destinationPoint!, animationBundle: AnimationBundle(duration: 0.3, delay: 0.0, dumping: 1.0, velocity: 1.0))
+            super.movingTouchRecognizer( destinationPoint!, animationBundle: AnimationBundle(duration: 0.3, delay: 0.0, dumping: 1.0, velocity: 1.0), callback: onComplition)
             isOpen = true
         }
         

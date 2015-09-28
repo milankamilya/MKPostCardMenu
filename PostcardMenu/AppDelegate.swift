@@ -21,7 +21,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         var contentScreen: ViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("ContentScreen") as! ViewController
         
-        var menuScreen: MenuTableViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("MenuScreen") as! MenuTableViewController
+        var menuScreen: gridMenuVC = mainStoryBoard.instantiateViewControllerWithIdentifier("MenuScreen") as! gridMenuVC
         var slideController: MKPostCardMenuVC = MKPostCardMenuVC(menuViewController: menuScreen, contentViewController: contentScreen)
         
         slideController.slideDirection = MKPostCardMenuAppearanceDirection.RightToLeft

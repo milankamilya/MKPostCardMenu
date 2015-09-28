@@ -10,28 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "PostCardMenuClasses/MKFixedFluidView.swift"
-            timestampString = "464715607.23453"
+            timestampString = "464865020.12654"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "53"
-            endingLineNumber = "53"
-            landmarkName = "touchEnded(_:)"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "PostCardMenuClasses/MKPostCardMenuVC.swift"
-            timestampString = "464860212.723234"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "261"
-            endingLineNumber = "261"
-            landmarkName = "closeMenuBehindContentViewController(_:animated:completion:)"
+            startingLineNumber = "43"
+            endingLineNumber = "43"
+            landmarkName = "touchMoving(_:)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

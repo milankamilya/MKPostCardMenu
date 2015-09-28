@@ -311,7 +311,7 @@ class MKFluidView: UIView {
         self.initializeTouchRecognizer(ControlPoint, animationBundle: AnimationBundle(duration: 0.1, delay: 0.0, dumping: 1.0, velocity: 1.0))
     }
     
-    func movingTouchRecognizer(ControlPoint: CGPoint,animationBundle aniBundle: AnimationBundle) {
+    func movingTouchRecognizer(ControlPoint: CGPoint,animationBundle aniBundle: AnimationBundle , callback onComplition:((Void) -> Void )?) {
         
         
             
@@ -338,6 +338,10 @@ class MKFluidView: UIView {
                     self.hidden = false
                     
                     self.isAnimating = false
+                    
+                    if (onComplition != nil) {
+                        onComplition!()
+                    }
             })
         
         
@@ -345,7 +349,7 @@ class MKFluidView: UIView {
     
     func movingTouchRecognizer(ControlPoint: CGPoint) {
         if !isAnimating! {
-        self.movingTouchRecognizer(ControlPoint, animationBundle: AnimationBundle( duration: 0.0, delay: 0.0, dumping: 1.0, velocity: 1.0))
+            self.movingTouchRecognizer(ControlPoint, animationBundle: AnimationBundle( duration: 0.0, delay: 0.0, dumping: 1.0, velocity: 1.0), callback: nil)
         }
     }
     

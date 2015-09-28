@@ -16,6 +16,7 @@
 		8CB0EE831BB0202A00BF2C4C /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8CB0EE811BB0202A00BF2C4C /* LaunchScreen.xib */; };
 		8CB0EE8F1BB0202A00BF2C4C /* PostcardMenuTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0EE8E1BB0202A00BF2C4C /* PostcardMenuTests.swift */; };
 		8CB0EE9A1BB0505400BF2C4C /* MKPostCardMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0EE991BB0505400BF2C4C /* MKPostCardMenuVC.swift */; };
+		8CD393C61BB56C1F002E8583 /* gridMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD393C51BB56C1F002E8583 /* gridMenuVC.swift */; };
 		8CE3FC5F1BB17C0500DBDEFF /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE3FC5E1BB17C0500DBDEFF /* MenuTableViewController.swift */; };
 /* End PBXBuildFile section */
 
@@ -43,6 +44,7 @@
 		8CB0EE8D1BB0202A00BF2C4C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8CB0EE8E1BB0202A00BF2C4C /* PostcardMenuTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostcardMenuTests.swift; sourceTree = "<group>"; };
 		8CB0EE991BB0505400BF2C4C /* MKPostCardMenuVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKPostCardMenuVC.swift; sourceTree = "<group>"; };
+		8CD393C51BB56C1F002E8583 /* gridMenuVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = gridMenuVC.swift; sourceTree = "<group>"; };
 		8CE3FC5E1BB17C0500DBDEFF /* MenuTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -93,6 +95,7 @@
 				8CB0EE811BB0202A00BF2C4C /* LaunchScreen.xib */,
 				8CB0EE761BB0202A00BF2C4C /* Supporting Files */,
 				8CE3FC5E1BB17C0500DBDEFF /* MenuTableViewController.swift */,
+				8CD393C51BB56C1F002E8583 /* gridMenuVC.swift */,
 			);
 			path = PostcardMenu;
 			sourceTree = "<group>";
@@ -233,6 +236,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8CE3FC5F1BB17C0500DBDEFF /* MenuTableViewController.swift in Sources */,
+				8CD393C61BB56C1F002E8583 /* gridMenuVC.swift in Sources */,
 				8C85E78A1BB2AC3D00F4CE94 /* MKFluidView.swift in Sources */,
 				8CB0EE7B1BB0202A00BF2C4C /* ViewController.swift in Sources */,
 				8CB0EE791BB0202A00BF2C4C /* AppDelegate.swift in Sources */,

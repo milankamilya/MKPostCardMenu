@@ -32,7 +32,7 @@ class ViewController: UIViewController {
     }
 
     func tapRecognized(recognizer: UITapGestureRecognizer) {
-        fixedFluidView?.toggleCurve(callback: nil)
+        //fixedFluidView?.toggleCurve(callback: nil)
     }
     
 //    
