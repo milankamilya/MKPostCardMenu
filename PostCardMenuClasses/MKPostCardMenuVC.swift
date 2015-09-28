@@ -31,6 +31,8 @@ class MKPostCardMenuVC: UIViewController {
     //MARK:- STORYBOARD COMPONENT
     
     //MARK:- PUBLIC PROPERTIES
+    var thresholdToOpen: CGFloat? = 60.0
+    
     private var menuViewControllerStorage: UIViewController?
     var menuViewController: UIViewController? {
         set{
@@ -70,6 +72,7 @@ class MKPostCardMenuVC: UIViewController {
     var slideDirection: MKPostCardMenuAppearanceDirection? = .LeftToRight
     var fluidView: MKFixedFluidView?
     var menuWasOpenAtPanBegin: Bool?
+    private var isMenuOpen: Bool? = false
     
     // It must be set before at the time of assigning.
     var imageArrayForButton: [String]?
@@ -80,6 +83,7 @@ class MKPostCardMenuVC: UIViewController {
     private var contentViewWidthWhenMenuIsOpen: CGFloat? = -1
     private var panGesture: UIPanGestureRecognizer?
     private var tapGesture: UITapGestureRecognizer?
+    private var screenBound: CGRect? = UIScreen.mainScreen().bounds
     
     //MARK:- INIT
     
@@ -130,7 +134,7 @@ class MKPostCardMenuVC: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         
-        if !self.isMenuOpen() {
+        if !self.isMenuOpen! {
             self.contentViewcontroller?.view.frame = self.view.bounds
         }
         
@@ -214,7 +218,7 @@ class MKPostCardMenuVC: UIViewController {
     //MARK:- ANIMATION
     
     @IBAction func toggleMenuAnimated(sender: AnyObject) {
-        if self.isMenuOpen() {
+        if self.isMenuOpen! {
             self.closeMenuAnimated(true, completion: nil)
         }
         else {
@@ -254,8 +258,10 @@ class MKPostCardMenuVC: UIViewController {
         self.menuViewController!.beginAppearanceTransition(false, animated: animated)
         //self.contentViewController.viewWillSlideIn(animated, inSlideMenuController: self)
 
+        isMenuOpen = false
             
         //TODO: - Close Menu Animation
+        self.fluidView?.isOpen = true
         self.fluidView?.toggleCurve(callback: {() -> Void in
                 self.menuViewController!.endAppearanceTransition()
                 //self.contentViewController.viewDidSlideIn(animated, inSlideMenuController: self)
@@ -297,7 +303,7 @@ class MKPostCardMenuVC: UIViewController {
         if swapContentViewController != nil {
             swapContentViewController()
         }
-        if self.isMenuOpen() {
+        if self.isMenuOpen! {
             self.closeMenuAnimated(animated, completion: completion)
         }
     }
@@ -332,72 +338,93 @@ class MKPostCardMenuVC: UIViewController {
         
 
         var controlPoint = panGesture.translationInView(self.fluidView!)
-        println("PanGesture :: \(controlPoint)")
+        var controlPointOriginal = controlPoint
+        //println("PanGesture :: \(controlPoint)")
+        //println("PanGesture :: \(controlPoint)")
+        
+        
+        if isMenuOpen! {
+            println("Menu is Open :: \(controlPointOriginal.x)")
+            // Determine direction
+            if controlPointOriginal.x < 0 {
+                
+                // Closing to Left
 
-        if controlPoint.x < 0 {
-            controlPoint.x = self.fluidView!.frame.size.width + controlPoint.x
+                
+            } else {
+                
+                // Closing to Right
+
+            
+            }
+            
+        } else {
+            
+            print("Menu is Closed :: \(controlPointOriginal.x)")
+
+            // Determine direction
+            if controlPointOriginal.x < 0 {
+                // Opening from Right
+                println(" Opening from Right")
+                controlPoint.x = self.fluidView!.frame.size.width + controlPoint.x
+                self.fluidView?.destinationPoint = CGPointMake( screenBound!.size.width * 0.2, screenBound!.size.height * 0.5)
+                self.fluidView?.directionOfBouncing = .SurfaceTensionRightInward
+                
+            } else {
+                // Opening from Left
+                println(" Opening from Left")
+                self.fluidView?.destinationPoint = CGPointMake( screenBound!.size.width * 0.8, screenBound!.size.height * 0.5)
+                self.fluidView?.directionOfBouncing = .SurfaceTensionLeftInward
+            }
         }
-        println("PanGesture :: \(controlPoint)")
 
         if panGesture.state == UIGestureRecognizerState.Began {
-            self.menuWasOpenAtPanBegin = self.isMenuOpen()
-            if self.menuWasOpenAtPanBegin! {
-                //self.contentViewcontroller!.viewWillSlideIn(true, inSlideMenuController: self)
-            }
-            else {
-                //self.contentViewController.viewWillSlideOut(true, inSlideMenuController: self)
-            }
+            self.menuWasOpenAtPanBegin = self.isMenuOpen
             self.showHideFluidView(true)
-            if !self.menuWasOpenAtPanBegin! {
-                //self.fluidView.createSnapshot()
-            }
             self.fluidView!.touchBegan(controlPoint)
         }
-        
         
         // TODO: Decide Direction Of Appearance
         
         
-        
-        self.fluidView!.touchMoving(controlPoint)
-        
-        
-        var translation: CGPoint = panGesture.translationInView(panGesture.view!)
-        if self.slideDirection == MKPostCardMenuAppearanceDirection.RightToLeft {
-            translation.x *= -1
-        }
-        var blurDegree: CGFloat = translation.x / self.view.bounds.size.width
-        if self.menuWasOpenAtPanBegin! {
-            blurDegree *= -1
-        }
-        blurDegree = min(max(blurDegree, 0.0), 1.0)
-        if self.menuWasOpenAtPanBegin! {
-            blurDegree = 1 - blurDegree
-        }
-        //NSLog("blurRadius: %f", blurDegree)
-        //self.fluidView!.forceUpdate(false, blurWithDegree: blurDegree)
-        if self.menuWasOpenAtPanBegin! {
-            var startFrame: CGRect = self.frameForMenuView()
-            var endFrame: CGRect = self.frameForMenuViewDisappeared()
-            var menuFrame: CGRect = startFrame
-            menuFrame.origin.x = (1 - blurDegree) * endFrame.origin.x + blurDegree * startFrame.origin.x
-            self.menuViewController!.view.frame = menuFrame
+        if panGesture.state == UIGestureRecognizerState.Changed {
+            self.fluidView!.touchMoving(controlPoint)
         }
         
         
         if panGesture.state == UIGestureRecognizerState.Ended {
             
-            self.fluidView!.touchEnded(controlPoint, callback: { (finished) -> Void in
-                self.configurePanGesture()
+            /***************************************************************
+             * TASKS ::
+             * 
+             * 1. Check Threshold to open up the menu
+             * 2.
+             *
+             *
+             ***************************************************************/
+            
+            if fabs(controlPointOriginal.x) > self.thresholdToOpen {
+                isMenuOpen = !isMenuOpen!
                 
-                self.menuViewController!.view.frame = self.frameForMenuView()
-                self.view.addSubview(self.menuViewController!.view)
-            })
+                if isMenuOpen! {
+                    // Menu is going to Open
+                    self.fluidView!.touchEnded(controlPoint, callback: { (finished) -> Void in
+                        self.configurePanGesture()
+                        
+                        self.menuViewController!.view.frame = self.frameForMenuView()
+                        self.view.addSubview(self.menuViewController!.view)
+                    })
+                    
+                    // TODO: Animation for Menus
+                    
+                }
+                
+            } else {
+                // Menu is going to Close
+                self.closeMenuAnimated(true, completion: nil)
+            }
             
-            // TODO: Animation for Menus
-            
-            
-            
+            println("State Of Menu :: \(isMenuOpen!)")
             
         }
     }
@@ -423,15 +450,11 @@ class MKPostCardMenuVC: UIViewController {
             self.view.insertSubview(self.fluidView!, belowSubview: self.menuViewController!.view)
             println(" FluidView = \(self.fluidView!) superview\(self.fluidView?.superview)")
             self.fluidView!.alpha = 1
-        }
-        else {
+        } else {
             self.fluidView!.removeFromSuperview()
         }
     }
     
-    func isMenuOpen() -> Bool {
-        return CGRectEqualToRect( self.menuViewController!.view.frame , self.frameForMenuView());
-    }
     
     func frameForFluidView() -> CGRect {
         var result: CGRect = self.view.bounds
