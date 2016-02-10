@@ -8,6 +8,16 @@
 
 import UIKit
 
+enum MKFluidMenuSide {
+    case Right
+    case Left
+}
+
+protocol MKFixedFluidViewDelegate {
+    func fixedFluidView(fixedFluidView:MKFixedFluidView, didOpenFromSide:MKFluidMenuSide);
+    func fixedFluidView(fixedFluidView:MKFixedFluidView, didCloseToSide:MKFluidMenuSide);
+}
+
 class MKFixedFluidView: MKFluidView {
 
     //MARK: - PUBLIC PROPERTIES
@@ -15,12 +25,14 @@ class MKFixedFluidView: MKFluidView {
     var isOpen: Bool? = false
     var isTogglePressed: Bool? = false
     
+    var delegate: MKFixedFluidViewDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
 
@@ -29,7 +41,7 @@ class MKFixedFluidView: MKFluidView {
     
     // touch Began
     func touchBegan(var touchPoint: CGPoint) {
-        println("touchBegan")
+        print("touchBegan")
         if !isOpen! {
             touchPoint = CGPointMake(touchPoint.x, destinationPoint!.y )
             super.initializeTouchRecognizer(touchPoint)
@@ -38,7 +50,7 @@ class MKFixedFluidView: MKFluidView {
     
     // touch Moving
     func touchMoving(var touchPoint: CGPoint) {
-        println("touchMoving \(touchPoint)\n")
+        print("touchMoving \(touchPoint)\n")
         if !isOpen! {
             touchPoint = CGPointMake(touchPoint.x, destinationPoint!.y )
             super.movingTouchRecognizer(touchPoint)
@@ -48,10 +60,12 @@ class MKFixedFluidView: MKFluidView {
     // touch End
     func touchEnded(touchPoint: CGPoint, callback onComplition:((Void) -> Void )?) {
         if !isOpen! && !isTogglePressed! {
-            println("touchEnded \(destinationPoint!)")
+            print("touchEnded \(destinationPoint!)")
             
             super.movingTouchRecognizer( destinationPoint!, animationBundle: AnimationBundle(duration: 0.3, delay: 0.0, dumping: 1.0, velocity: 1.0), callback: onComplition)
             isOpen = true
+            delegate?.fixedFluidView(self, didOpenFromSide: MKFluidMenuSide.Right)
+
         }
         
         isTogglePressed = false
@@ -59,13 +73,19 @@ class MKFixedFluidView: MKFluidView {
     
     // Open / Close
     func toggleCurve(callback onComplition:((Void) -> Void )?) {
-        println("toggleCurve")
+        print("toggleCurve")
         if isOpen! {
             super.endTouchRecognizer(destinationPoint!, callback: onComplition)
             isOpen = false
+            delegate?.fixedFluidView(self, didCloseToSide: MKFluidMenuSide.Right)
+
+            
         } else {
             super.initializeTouchRecognizer( destinationPoint!, animationBundle: AnimationBundle(duration: 0.3, delay: 0.0, dumping: 1.0, velocity: 1.0))
             isOpen = true
+            
+            delegate?.fixedFluidView(self, didOpenFromSide: MKFluidMenuSide.Right)
+            
         }
         //isTogglePressed = true
     }

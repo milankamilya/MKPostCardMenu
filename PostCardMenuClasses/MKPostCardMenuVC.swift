@@ -75,7 +75,8 @@ class MKPostCardMenuVC: UIViewController {
     private var isMenuOpen: Bool? = false
     
     // It must be set before at the time of assigning.
-    var imageArrayForButton: [String]?
+    var springMenuView: MKSpringMenu?
+    var imageArrayForButton: [UIImage]?
     
     
     
@@ -95,7 +96,7 @@ class MKPostCardMenuVC: UIViewController {
         
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         
         super.init(coder: aDecoder)
         
@@ -121,11 +122,17 @@ class MKPostCardMenuVC: UIViewController {
         //self.contentViewController!.didMoveToParentViewController(self)
         
         self.fluidView = MKFixedFluidView(frame: self.frameForFluidView())
-        //self.fluidView.blurTintColor = UIColor.colorWithWhite(0.85, alpha: 1.0)
         self.fluidView?.fillColor = UIColor(red: 182.0/255.0, green: 168.0/255.0, blue: 224.0/255.0, alpha: 1.0)
         self.fluidView?.hidden = false
         self.fluidView!.directionOfBouncing = .SurfaceTensionRightInward
+        self.fluidView?.delegate = self
         self.fluidView!.addGestureRecognizer(self.getTapGesture())
+        
+        self.springMenuView = MKSpringMenu(frame: self.frameForMenuViewDisappeared())
+        self.springMenuView?.numberOfButtons = 3
+        self.springMenuView?.arrayOfImagesForButtonNormalState = self.imageArrayForButton!
+        self.springMenuView?.initialSetup()
+        self.view.addSubview(self.springMenuView!)
         
         self.configurePanGesture()
         self.loadMenuViewControllerViewIfNeeded()
@@ -203,9 +210,9 @@ class MKPostCardMenuVC: UIViewController {
 //        return self.menuViewController!.shouldAutorotate() && self.contentViewcontroller!.shouldAutorotate() && self.panGesture!.state == UIGestureRecognizerState.Changed
 //    }
     
-    override func supportedInterfaceOrientations() -> Int {
-        return self.menuViewController!.supportedInterfaceOrientations() & self.contentViewcontroller!.supportedInterfaceOrientations()
-    }
+//    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+//        return self.menuViewController!.supportedInterfaceOrientations()  self.contentViewcontroller!.supportedInterfaceOrientations()
+//    }
     /*
     - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)toInterfaceOrientation
     {
@@ -228,7 +235,7 @@ class MKPostCardMenuVC: UIViewController {
     
     func openMenuAnimated(animated: Bool, completion:onComplitionType? ) {
         
-        var duration: NSTimeInterval = animated ? kSlideAnimationDuration : 0
+        let duration: NSTimeInterval = animated ? kSlideAnimationDuration : 0
         self.showHideFluidView(true)
         //self.fluidView.createSnapshot()
         
@@ -266,7 +273,8 @@ class MKPostCardMenuVC: UIViewController {
                 self.menuViewController!.endAppearanceTransition()
                 //self.contentViewController.viewDidSlideIn(animated, inSlideMenuController: self)
                 self.menuViewController!.view.frame = self.frameForMenuViewDisappeared()
-                
+                self.springMenuView!.frame = self.frameForMenuViewDisappeared()
+            
                 self.showHideFluidView(false)
                 self.configurePanGesture()
             
@@ -300,9 +308,9 @@ class MKPostCardMenuVC: UIViewController {
                 
             }
         }
-        if swapContentViewController != nil {
+        //if swapContentViewController != nil {
             swapContentViewController()
-        }
+        //}
         if self.isMenuOpen! {
             self.closeMenuAnimated(animated, completion: completion)
         }
@@ -338,13 +346,11 @@ class MKPostCardMenuVC: UIViewController {
         
 
         var controlPoint = panGesture.translationInView(self.fluidView!)
-        var controlPointOriginal = controlPoint
-        //println("PanGesture :: \(controlPoint)")
-        //println("PanGesture :: \(controlPoint)")
+        let controlPointOriginal = controlPoint
         
         
         if isMenuOpen! {
-            println("Menu is Open :: \(controlPointOriginal.x)")
+            print("Menu is Open :: \(controlPointOriginal.x)")
             // Determine direction
             if controlPointOriginal.x < 0 {
                 
@@ -360,21 +366,23 @@ class MKPostCardMenuVC: UIViewController {
             
         } else {
             
-            print("Menu is Closed :: \(controlPointOriginal.x)")
+            print("Menu is Closed :: \(controlPointOriginal.x)", terminator: "")
 
             // Determine direction
             if controlPointOriginal.x < 0 {
                 // Opening from Right
-                println(" Opening from Right")
+                print(" Opening from Right")
                 controlPoint.x = self.fluidView!.frame.size.width + controlPoint.x
                 self.fluidView?.destinationPoint = CGPointMake( screenBound!.size.width * 0.2, screenBound!.size.height * 0.5)
                 self.fluidView?.directionOfBouncing = .SurfaceTensionRightInward
+                self.slideDirection = MKPostCardMenuAppearanceDirection.RightToLeft
                 
             } else {
                 // Opening from Left
-                println(" Opening from Left")
+                print(" Opening from Left")
                 self.fluidView?.destinationPoint = CGPointMake( screenBound!.size.width * 0.8, screenBound!.size.height * 0.5)
                 self.fluidView?.directionOfBouncing = .SurfaceTensionLeftInward
+                self.slideDirection = MKPostCardMenuAppearanceDirection.LeftToRight
             }
         }
 
@@ -411,8 +419,22 @@ class MKPostCardMenuVC: UIViewController {
                     self.fluidView!.touchEnded(controlPoint, callback: { (finished) -> Void in
                         self.configurePanGesture()
                         
-                        self.menuViewController!.view.frame = self.frameForMenuView()
-                        self.view.addSubview(self.menuViewController!.view)
+                        switch self.slideDirection! {
+                            
+                            case .LeftToRight :
+                                self.springMenuView!.direction = .Left
+
+                            case .RightToLeft :
+                                self.springMenuView?.direction = .Right
+
+                        }
+                        self.springMenuView?.frame = self.frameForMenuView()
+                        self.springMenuView?.initialSetup()
+                        self.springMenuView?.arrangeButtons()
+                        
+                        
+                        //self.menuViewController!.view.frame = self.frameForMenuView()
+                        //self.view.addSubview(self.menuViewController!.view)
                     })
                     
                     // TODO: Animation for Menus
@@ -424,7 +446,7 @@ class MKPostCardMenuVC: UIViewController {
                 self.closeMenuAnimated(true, completion: nil)
             }
             
-            println("State Of Menu :: \(isMenuOpen!)")
+            print("State Of Menu :: \(isMenuOpen!)")
             
         }
     }
@@ -448,7 +470,7 @@ class MKPostCardMenuVC: UIViewController {
                 self.fluidView!.removeFromSuperview()
             }
             self.view.insertSubview(self.fluidView!, belowSubview: self.menuViewController!.view)
-            println(" FluidView = \(self.fluidView!) superview\(self.fluidView?.superview)")
+            print(" FluidView = \(self.fluidView!) superview\(self.fluidView?.superview)")
             self.fluidView!.alpha = 1
         } else {
             self.fluidView!.removeFromSuperview()
@@ -457,7 +479,7 @@ class MKPostCardMenuVC: UIViewController {
     
     
     func frameForFluidView() -> CGRect {
-        var result: CGRect = self.view.bounds
+        let result: CGRect = self.view.bounds
         return result
     }
     
@@ -486,10 +508,10 @@ class MKPostCardMenuVC: UIViewController {
     func menuViewAutoresizingMaskAccordingToCurrentSlideDirection() -> UIViewAutoresizing {
         var resizingMask: UIViewAutoresizing = UIViewAutoresizing.FlexibleHeight
         if self.slideDirection == MKPostCardMenuAppearanceDirection.LeftToRight {
-            resizingMask = resizingMask | UIViewAutoresizing.FlexibleRightMargin
+            resizingMask = resizingMask.union(UIViewAutoresizing.FlexibleRightMargin)
         }
         else {
-            resizingMask = resizingMask | UIViewAutoresizing.FlexibleLeftMargin
+            resizingMask = resizingMask.union(UIViewAutoresizing.FlexibleLeftMargin)
         }
         return resizingMask
     }
@@ -497,6 +519,15 @@ class MKPostCardMenuVC: UIViewController {
 }
 
 
+extension MKPostCardMenuVC : MKFixedFluidViewDelegate {
+    func fixedFluidView(fixedFluidView: MKFixedFluidView, didCloseToSide: MKFluidMenuSide) {
+    }
+    
+    func fixedFluidView(fixedFluidView: MKFixedFluidView, didOpenFromSide: MKFluidMenuSide) {
+        springMenuView!.arrangeButtonsRightward()
+    }
+    
+}
 
 
 

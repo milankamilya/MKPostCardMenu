@@ -18,6 +18,7 @@
 		8CB0EE9A1BB0505400BF2C4C /* MKPostCardMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CB0EE991BB0505400BF2C4C /* MKPostCardMenuVC.swift */; };
 		8CD393C61BB56C1F002E8583 /* gridMenuVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CD393C51BB56C1F002E8583 /* gridMenuVC.swift */; };
 		8CE3FC5F1BB17C0500DBDEFF /* MenuTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE3FC5E1BB17C0500DBDEFF /* MenuTableViewController.swift */; };
+		8CE70E0B1BB94EA000D9065C /* MKSpringMenu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8CE70E0A1BB94EA000D9065C /* MKSpringMenu.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +47,7 @@
 		8CB0EE991BB0505400BF2C4C /* MKPostCardMenuVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKPostCardMenuVC.swift; sourceTree = "<group>"; };
 		8CD393C51BB56C1F002E8583 /* gridMenuVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = gridMenuVC.swift; sourceTree = "<group>"; };
 		8CE3FC5E1BB17C0500DBDEFF /* MenuTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuTableViewController.swift; sourceTree = "<group>"; };
+		8CE70E0A1BB94EA000D9065C /* MKSpringMenu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MKSpringMenu.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -131,6 +133,7 @@
 				8C85E7891BB2AC3D00F4CE94 /* MKFluidView.swift */,
 				8CB0EE991BB0505400BF2C4C /* MKPostCardMenuVC.swift */,
 				8C85E78B1BB2AE4D00F4CE94 /* MKFixedFluidView.swift */,
+				8CE70E0A1BB94EA000D9065C /* MKSpringMenu.swift */,
 			);
 			path = PostCardMenuClasses;
 			sourceTree = "<group>";
@@ -179,6 +182,8 @@
 		8CB0EE6B1BB0202A00BF2C4C /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftMigration = 0720;
+				LastSwiftUpdateCheck = 0720;
 				LastUpgradeCheck = 0640;
 				ORGANIZATIONNAME = innofied;
 				TargetAttributes = {
@@ -240,6 +245,7 @@
 				8C85E78A1BB2AC3D00F4CE94 /* MKFluidView.swift in Sources */,
 				8CB0EE7B1BB0202A00BF2C4C /* ViewController.swift in Sources */,
 				8CB0EE791BB0202A00BF2C4C /* AppDelegate.swift in Sources */,
+				8CE70E0B1BB94EA000D9065C /* MKSpringMenu.swift in Sources */,
 				8C85E78C1BB2AE4D00F4CE94 /* MKFixedFluidView.swift in Sources */,
 				8CB0EE9A1BB0505400BF2C4C /* MKPostCardMenuVC.swift in Sources */,
 			);

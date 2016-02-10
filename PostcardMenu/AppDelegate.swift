@@ -12,17 +12,19 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
     
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject : AnyObject]?) -> Bool {
         
-        var mainStoryBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
+        let mainStoryBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
         
-        var contentScreen: ViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("ContentScreen") as! ViewController
+        let contentScreen: ViewController = mainStoryBoard.instantiateViewControllerWithIdentifier("ContentScreen") as! ViewController
         
-        var menuScreen: gridMenuVC = mainStoryBoard.instantiateViewControllerWithIdentifier("MenuScreen") as! gridMenuVC
-        var slideController: MKPostCardMenuVC = MKPostCardMenuVC(menuViewController: menuScreen, contentViewController: contentScreen)
+        let menuScreen: gridMenuVC = mainStoryBoard.instantiateViewControllerWithIdentifier("MenuScreen") as! gridMenuVC
+        let slideController: MKPostCardMenuVC = MKPostCardMenuVC(menuViewController: menuScreen, contentViewController: contentScreen)
+        
+        slideController.imageArrayForButton = Array(arrayLiteral:  UIImage(named: "1")!, UIImage(named: "2")!, UIImage(named: "3")!, UIImage(named: "4")!, UIImage(named: "5")!, UIImage(named: "6")!, UIImage(named: "7")!, UIImage(named: "8")!)
+        
         
         slideController.slideDirection = MKPostCardMenuAppearanceDirection.RightToLeft
         slideController.panGestureEnabled = false

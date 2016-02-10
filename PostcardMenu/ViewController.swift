@@ -11,18 +11,31 @@ import UIKit
 class ViewController: UIViewController {
 
     var fixedFluidView: MKFixedFluidView?
+    var springMenu: MKSpringMenu!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-//        fixedFluidView = MKFixedFluidView(frame: self.view.frame)
-//        fixedFluidView?.fillColor = UIColor.orangeColor()
-//        fixedFluidView?.directionOfBouncing = .SurfaceTensionLeftInward
-//        self.view.addSubview(fixedFluidView!)
-//        
-//        var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("tapRecognized:"))
-//        self.view.addGestureRecognizer(tapGestureRecognizer)
+        fixedFluidView = MKFixedFluidView(frame: self.view.frame)
+        fixedFluidView?.fillColor = UIColor.orangeColor()
+        fixedFluidView?.directionOfBouncing = .SurfaceTensionLeftInward
+        fixedFluidView?.delegate = self
+        self.view.addSubview(fixedFluidView!)
+        
+        var tapGestureRecognizer: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: Selector("tapRecognized:"))
+        self.view.addGestureRecognizer(tapGestureRecognizer)
+        
+        
+        
+        springMenu = MKSpringMenu(frame: CGRectMake(0, 80, 200, 200))
+        //self.view.addSubview(springMenu)
+        springMenu.numberOfButtons = 3
+       
+        springMenu.arrayOfImagesForButtonNormalState = Array(arrayLiteral:  UIImage(named: "1")!, UIImage(named: "2")!, UIImage(named: "3")!, UIImage(named: "4")!, UIImage(named: "5")!, UIImage(named: "6")!, UIImage(named: "7")!, UIImage(named: "8")!)
+        
+        springMenu.initialSetup()
+        
         
     }
 
@@ -30,9 +43,14 @@ class ViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    override func viewDidAppear(animated: Bool) {
+        super.viewDidAppear(animated)
+        
+    }
 
     func tapRecognized(recognizer: UITapGestureRecognizer) {
-        //fixedFluidView?.toggleCurve(callback: nil)
+        fixedFluidView?.toggleCurve(callback: nil)
     }
     
 //    
@@ -44,7 +62,7 @@ class ViewController: UIViewController {
 //                
 //                let touchLocal: UITouch = touch as! UITouch
 //                var point: CGPoint = touchLocal.locationInView(touchLocal.view)
-//                println("touchesBegan VC \(point)")
+//                //println("touchesBegan VC \(point)")
 //                fixedFluidView?.touchBegan(point)
 //            }
 //        }
@@ -57,7 +75,7 @@ class ViewController: UIViewController {
 //                let touchLocal: UITouch = touch as! UITouch
 //                
 //                var point: CGPoint = touchLocal.locationInView(touchLocal.view)
-//                println("touchesMoved VC  \(point)")
+//                //println("touchesMoved VC  \(point)")
 //
 //                fixedFluidView?.touchMoving(point)
 //            }
@@ -70,7 +88,7 @@ class ViewController: UIViewController {
 //                let touchLocal: UITouch = touch as! UITouch
 //                
 //                var point: CGPoint = touchLocal.locationInView(touchLocal.view)
-//                println("touchesEnded VC \(point)")
+//                //println("touchesEnded VC \(point)")
 //
 //                fixedFluidView?.touchEnded(point)
 //            }
@@ -82,14 +100,24 @@ class ViewController: UIViewController {
 //            for touch in touches {
 //                let touchLocal: UITouch = touch as! UITouch                
 //                var point: CGPoint = touchLocal.locationInView(touchLocal.view)
-//                println("touchescancelled VC \(point)")
+//                //println("touchescancelled VC \(point)")
 //                
 //                fixedFluidView?.touchEnded(point)
 //
 //            }
 //        }
 //    }
-//    
+    
 
+}
+
+extension ViewController : MKFixedFluidViewDelegate {
+    func fixedFluidView(fixedFluidView: MKFixedFluidView, didCloseToSide: MKFluidMenuSide) {
+    }
+    
+    func fixedFluidView(fixedFluidView: MKFixedFluidView, didOpenFromSide: MKFluidMenuSide) {
+        springMenu.arrangeButtonsRightward()
+    }
+    
 }
 

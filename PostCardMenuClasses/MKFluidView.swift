@@ -114,7 +114,7 @@ class MKFluidView: UIView {
         setupAnimationSpecification()
     }
 
-    required init(coder aDecoder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
 
         self.hidden = true
@@ -181,14 +181,14 @@ class MKFluidView: UIView {
             displayLink = CADisplayLink(target: self, selector: Selector("updateDisplay:"))
             displayLink?.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)
             
-            UIView.animateWithDuration( self.animationDuration! , delay: animationSpecs!.centerDelay, usingSpringWithDamping: animationSpecs!.centerDumping, initialSpringVelocity: animationSpecs!.centerVelocity, options: (.BeginFromCurrentState | .AllowUserInteraction) , animations: { () -> Void in
+            UIView.animateWithDuration( self.animationDuration! , delay: animationSpecs!.centerDelay, usingSpringWithDamping: animationSpecs!.centerDumping, initialSpringVelocity: animationSpecs!.centerVelocity, options: ([.BeginFromCurrentState, .AllowUserInteraction]) , animations: { () -> Void in
                 
                 self.getFrameForBothViews(isOpening)
                 
             }, completion: { (finished) -> Void in
                 
                 
-                UIView.animateWithDuration( self.animationDuration! , delay: self.animationSpecs!.centerDelay, usingSpringWithDamping: self.animationSpecs!.centerDumping, initialSpringVelocity: self.animationSpecs!.centerVelocity, options: (.BeginFromCurrentState | .AllowUserInteraction) , animations: { () -> Void in
+                UIView.animateWithDuration( self.animationDuration! , delay: self.animationSpecs!.centerDelay, usingSpringWithDamping: self.animationSpecs!.centerDumping, initialSpringVelocity: self.animationSpecs!.centerVelocity, options: ([.BeginFromCurrentState, .AllowUserInteraction]) , animations: { () -> Void in
                     
                         self.getFrameForBothViews(!isOpening)
                     
@@ -230,7 +230,7 @@ class MKFluidView: UIView {
             
             curveType = CurveShape.SurfaceTensionPhaseI
             
-            UIView.animateWithDuration( self.animationDuration! , delay: animationSpecs!.centerDelay, usingSpringWithDamping: animationSpecs!.centerDumping, initialSpringVelocity: animationSpecs!.centerVelocity, options: (.BeginFromCurrentState | .AllowUserInteraction) , animations: { () -> Void in
+            UIView.animateWithDuration( self.animationDuration! , delay: animationSpecs!.centerDelay, usingSpringWithDamping: animationSpecs!.centerDumping, initialSpringVelocity: animationSpecs!.centerVelocity, options: ([.BeginFromCurrentState, .AllowUserInteraction]) , animations: { () -> Void in
                 
                 self.getFrameForBothViews(true)
                 
@@ -240,7 +240,7 @@ class MKFluidView: UIView {
                     self.sideAnchorViewHolder = self.sideAnchorView?.center
                     
                     
-                    UIView.animateWithDuration( NSTimeInterval(0.3) , delay: NSTimeInterval(0.0), options: (UIViewAnimationOptions.CurveEaseOut | UIViewAnimationOptions.AllowUserInteraction), animations: { () -> Void in
+                    UIView.animateWithDuration( NSTimeInterval(0.3) , delay: NSTimeInterval(0.0), options: ([UIViewAnimationOptions.CurveEaseOut, UIViewAnimationOptions.AllowUserInteraction]), animations: { () -> Void in
                         
                         self.sideAnchorView?.frame = CGRectMake(self.centerAnchorView!.center.x, self.sideAnchorView!.frame.origin.y, self.sideAnchorView!.frame.size.width, self.sideAnchorView!.frame.size.width)
                         
@@ -248,7 +248,7 @@ class MKFluidView: UIView {
                         
                         self.curveType = CurveShape.SurfaceTensionPhaseIII
                         
-                        UIView.animateWithDuration( NSTimeInterval(0.5) , delay: self.animationSpecs!.centerDelay, usingSpringWithDamping: CGFloat(0.3), initialSpringVelocity: self.animationSpecs!.centerVelocity, options: (.BeginFromCurrentState | .AllowUserInteraction) , animations: { () -> Void in
+                        UIView.animateWithDuration( NSTimeInterval(0.5) , delay: self.animationSpecs!.centerDelay, usingSpringWithDamping: CGFloat(0.3), initialSpringVelocity: self.animationSpecs!.centerVelocity, options: ([.BeginFromCurrentState, .AllowUserInteraction]) , animations: { () -> Void in
                             
                             self.getFrameForBothViews(false)
                             
@@ -322,8 +322,8 @@ class MKFluidView: UIView {
             displayLink?.addToRunLoop(NSRunLoop.mainRunLoop(), forMode: NSDefaultRunLoopMode)
             
             // 1. set View to sideView, centerView
-            var heightOfControlPoint: CGFloat = self.frame.size.height - ControlPoint.y
-            var distXBetnPoints: CGFloat = (heightOfControlPoint * 1.5)/2.0
+            let heightOfControlPoint: CGFloat = self.frame.size.height - ControlPoint.y
+            let distXBetnPoints: CGFloat = (heightOfControlPoint * 1.5)/2.0
             var xOfSideAnchorView = ControlPoint.x - distXBetnPoints
             
             self.curveType = CurveShape.SurfaceTensionPhaseI
@@ -366,7 +366,7 @@ class MKFluidView: UIView {
             self.curveType = CurveShape.SurfaceTensionPhaseII
             self.sideAnchorViewHolder = self.sideAnchorView?.center
             
-            UIView.animateWithDuration( NSTimeInterval(0.3) , delay: NSTimeInterval(0.0), options: (UIViewAnimationOptions.CurveEaseOut | UIViewAnimationOptions.AllowUserInteraction), animations: { () -> Void in
+            UIView.animateWithDuration( NSTimeInterval(0.3) , delay: NSTimeInterval(0.0), options: ([UIViewAnimationOptions.CurveEaseOut, UIViewAnimationOptions.AllowUserInteraction]), animations: { () -> Void in
                 
                 self.setFrameToBothAnchorView(ControlPoint)
                 
@@ -374,7 +374,7 @@ class MKFluidView: UIView {
                     
                     self.curveType = CurveShape.SurfaceTensionPhaseIII
                     
-                    UIView.animateWithDuration( NSTimeInterval(0.5) , delay: self.animationSpecs!.centerDelay, usingSpringWithDamping: CGFloat(0.3), initialSpringVelocity: self.animationSpecs!.centerVelocity, options: (.BeginFromCurrentState | .AllowUserInteraction) , animations: { () -> Void in
+                    UIView.animateWithDuration( NSTimeInterval(0.5) , delay: self.animationSpecs!.centerDelay, usingSpringWithDamping: CGFloat(0.3), initialSpringVelocity: self.animationSpecs!.centerVelocity, options: ([.BeginFromCurrentState, .AllowUserInteraction]) , animations: { () -> Void in
                         
                             self.setFrameToBothAnchorView(CGPointMake(0, 0))
                         
@@ -450,7 +450,7 @@ class MKFluidView: UIView {
                 // TODO:- SurfaceTension A few variable might be set here
             
             default:
-                print("DirectionOfBouncing :: default")
+                print("DirectionOfBouncing :: default", terminator: "")
         }
 //        centerAnchorView?.backgroundColor = UIColor.greenColor()
 //        sideAnchorView?.backgroundColor = UIColor.greenColor()
@@ -495,7 +495,7 @@ class MKFluidView: UIView {
                         self.centerAnchorView?.frame = CGRectMake( 0 - (self.MKAnchorViewDimension/2.0), self.centerAnchorView!.frame.origin.y - (self.MKAnchorViewDimension/2.0), self.MKAnchorViewDimension, self.MKAnchorViewDimension)
                     
                     default :
-                        print()
+                        print("", terminator: "")
                 }
             case .SurfaceTensionRightInward :
                 switch curveType! {
@@ -528,7 +528,7 @@ class MKFluidView: UIView {
                         self.centerAnchorView?.frame = CGRectMake( self.frame.size.width - (self.MKAnchorViewDimension/2.0), self.centerAnchorView!.frame.origin.y - (self.MKAnchorViewDimension/2.0), self.MKAnchorViewDimension, self.MKAnchorViewDimension)
                         
                     default :
-                        print()
+                        print("", terminator: "")
                 }
             case .SurfaceTensionTopInward :
                 switch curveType! {
@@ -560,9 +560,9 @@ class MKFluidView: UIView {
                         self.centerAnchorView?.frame = CGRectMake(self.centerAnchorView!.frame.origin.x - (self.MKAnchorViewDimension/2.0), 0 - (self.MKAnchorViewDimension/2.0), self.MKAnchorViewDimension, self.MKAnchorViewDimension)
                         
                     default :
-                        print()
+                        print("", terminator: "")
                     }
-                print()
+                print("", terminator: "")
             case .SurfaceTensionBottomInward :
                 switch curveType! {
                     case .SurfaceTensionPhase0 :
@@ -586,10 +586,10 @@ class MKFluidView: UIView {
                         self.centerAnchorView?.frame = CGRectMake(self.centerAnchorView!.frame.origin.x - (self.MKAnchorViewDimension/2.0), self.frame.size.height - (self.MKAnchorViewDimension/2.0), self.MKAnchorViewDimension, self.MKAnchorViewDimension)
                     
                     default :
-                        print()
+                        print("", terminator: "")
                 }
             default :
-                print()
+                print("", terminator: "")
             }
             
     }
@@ -608,7 +608,7 @@ class MKFluidView: UIView {
                     centerAnchorView?.frame = CGRectMake(self.frame.size.width/2 - (MKAnchorViewDimension/2.0), self.frame.size.height * 0.20 - (MKAnchorViewDimension/2.0), MKAnchorViewDimension, MKAnchorViewDimension)
                     sideAnchorView?.frame = CGRectMake(physicalObject!.x - physicalObject!.width/2.0 - (MKAnchorViewDimension/2.0), self.frame.size.height - (MKAnchorViewDimension/2.0), MKAnchorViewDimension, MKAnchorViewDimension)
                 default:
-                    print("DirectionOfBouncing :: default")
+                    print("DirectionOfBouncing :: default", terminator: "")
             }
 
         } else {
@@ -622,7 +622,7 @@ class MKFluidView: UIView {
                     centerAnchorView?.frame = CGRectMake(self.frame.size.width/2 - (MKAnchorViewDimension/2.0), self.frame.size.height - (MKAnchorViewDimension/2.0), MKAnchorViewDimension, MKAnchorViewDimension)
                 
                 default:
-                    print("DirectionOfBouncing :: default")
+                    print("DirectionOfBouncing :: default", terminator: "")
             }
         }
         
@@ -660,41 +660,41 @@ class MKFluidView: UIView {
                         path.closePath()
                     
                     case .EggShape :
-                        var a: CGPoint = CGPointMake(centerLayerControlPoint.x/4.0, centerLayerControlPoint.y)
-                        var b: CGPoint = CGPointMake(centerLayerControlPoint.x*1.75, centerLayerControlPoint.y)
+                        let a: CGPoint = CGPointMake(centerLayerControlPoint.x/4.0, centerLayerControlPoint.y)
+                        let b: CGPoint = CGPointMake(centerLayerControlPoint.x*1.75, centerLayerControlPoint.y)
                         
                         path.moveToPoint(sideLayerControlPoint)
                         path.addCurveToPoint(destinationPointHorizontally, controlPoint1: a, controlPoint2: b)
                         path.closePath()
 
                     default:
-                        print("")
+                        print("", terminator: "")
                 }
             case .TopInward :
                 switch curveShape {
                 case .Arc :
-                    print("")
+                    print("", terminator: "")
                 case .EggShape :
-                    print("")
+                    print("", terminator: "")
                 default:
-                    print("")
+                    print("", terminator: "")
                 }
             
             case .SurfaceTensionBottomInward , .SurfaceTensionTopInward :
                 switch curveShape {
                     case .Arc :
-                        print("")
+                        print("", terminator: "")
                     case .EggShape :
-                        print("")
+                        print("", terminator: "")
                     case .RoundTrigonal :
-                        print("")
+                        print("", terminator: "")
                     case .SurfaceTensionPhaseI :
                         
                         
-                        var controlPointForCenter1: CGPoint = CGPointMake( sideLayerControlPoint.x + distXBetnPoints * 0.60, centerLayerControlPoint.y )
-                        var controlPointForCenter2: CGPoint = CGPointMake(centerLayerControlPoint.x + distXBetnPoints * 0.40, centerLayerControlPoint.y)
-                        var controlPointForLeftSide: CGPoint = CGPointMake(sideLayerControlPoint.x + distXBetnPoints * 0.3, sideLayerControlPoint.y)
-                        var controlPointForRightSide: CGPoint = CGPointMake(destinationPointHorizontally.x - distXBetnPoints * 0.3, sideLayerControlPoint.y)
+                        let controlPointForCenter1: CGPoint = CGPointMake( sideLayerControlPoint.x + distXBetnPoints * 0.60, centerLayerControlPoint.y )
+                        let controlPointForCenter2: CGPoint = CGPointMake(centerLayerControlPoint.x + distXBetnPoints * 0.40, centerLayerControlPoint.y)
+                        let controlPointForLeftSide: CGPoint = CGPointMake(sideLayerControlPoint.x + distXBetnPoints * 0.3, sideLayerControlPoint.y)
+                        let controlPointForRightSide: CGPoint = CGPointMake(destinationPointHorizontally.x - distXBetnPoints * 0.3, sideLayerControlPoint.y)
                         
                         
                         path.moveToPoint(sideLayerControlPoint)
@@ -706,12 +706,12 @@ class MKFluidView: UIView {
                         
                         distXBetnPoints = centerLayerControlPoint.x - sideAnchorViewHolder!.x
                         destinationPointHorizontally = CGPointMake(centerLayerControlPoint.x + distXBetnPoints, sideAnchorViewHolder!.y)
-                        var distXBetnCenterAndMovingSidePoints: CGFloat = centerLayerControlPoint.x - sideLayerControlPoint.x
-                        var controlPointForCenter1: CGPoint = CGPointMake( sideAnchorViewHolder!.x + distXBetnPoints * 0.70, centerLayerControlPoint.y )
-                        var controlPointForCenter2: CGPoint = CGPointMake(centerLayerControlPoint.x + distXBetnPoints * 0.30, centerLayerControlPoint.y)
+                        let distXBetnCenterAndMovingSidePoints: CGFloat = centerLayerControlPoint.x - sideLayerControlPoint.x
+                        let controlPointForCenter1: CGPoint = CGPointMake( sideAnchorViewHolder!.x + distXBetnPoints * 0.70, centerLayerControlPoint.y )
+                        let controlPointForCenter2: CGPoint = CGPointMake(centerLayerControlPoint.x + distXBetnPoints * 0.30, centerLayerControlPoint.y)
                         
                         var controlPointForLeftSide: CGPoint = CGPointMake( sideLayerControlPoint.x + distXBetnCenterAndMovingSidePoints * 0.3 , sideLayerControlPoint.y)
-                        var controlPointForRightSide: CGPoint = CGPointMake( centerLayerControlPoint.x + distXBetnCenterAndMovingSidePoints * 0.7, sideLayerControlPoint.y)
+                        let controlPointForRightSide: CGPoint = CGPointMake( centerLayerControlPoint.x + distXBetnCenterAndMovingSidePoints * 0.7, sideLayerControlPoint.y)
                         
                     
                         path.moveToPoint(sideAnchorViewHolder!)
@@ -724,8 +724,8 @@ class MKFluidView: UIView {
                         
                         distXBetnPoints = centerLayerControlPoint.x - sideAnchorViewHolder!.x
                         destinationPointHorizontally = CGPointMake(centerLayerControlPoint.x + distXBetnPoints, sideAnchorViewHolder!.y)
-                        var controlPointForCenter1: CGPoint = CGPointMake( sideAnchorViewHolder!.x + distXBetnPoints * 0.70, centerLayerControlPoint.y )
-                        var controlPointForCenter2: CGPoint = CGPointMake(centerLayerControlPoint.x + distXBetnPoints * 0.30, centerLayerControlPoint.y)
+                        let controlPointForCenter1: CGPoint = CGPointMake( sideAnchorViewHolder!.x + distXBetnPoints * 0.70, centerLayerControlPoint.y )
+                        let controlPointForCenter2: CGPoint = CGPointMake(centerLayerControlPoint.x + distXBetnPoints * 0.30, centerLayerControlPoint.y)
                         
                         path.moveToPoint(sideAnchorViewHolder!)
                         path.addCurveToPoint(centerLayerControlPoint, controlPoint1: sideLayerControlPoint, controlPoint2: controlPointForCenter1)
@@ -733,26 +733,26 @@ class MKFluidView: UIView {
                         path.closePath()
                     
                     default:
-                        print("")
+                        print("", terminator: "")
                 }
             
             case .SurfaceTensionLeftInward, .SurfaceTensionRightInward:
                 switch curveShape {
                     
                     case .Arc :
-                        print("")
+                        print("", terminator: "")
                     case .EggShape :
-                        print("")
+                        print("", terminator: "")
                     case .RoundTrigonal :
-                        print("")
+                        print("", terminator: "")
                     case .SurfaceTensionPhaseI :
                         
                         
-                        var controlPointForCenter1: CGPoint = CGPointMake( centerLayerControlPoint.x , centerLayerControlPoint.y - distYBetnPoints * 0.40 )
-                        var controlPointForCenter2: CGPoint = CGPointMake( centerLayerControlPoint.x , centerLayerControlPoint.y + distYBetnPoints * 0.40 )
+                        let controlPointForCenter1: CGPoint = CGPointMake( centerLayerControlPoint.x , centerLayerControlPoint.y - distYBetnPoints * 0.40 )
+                        let controlPointForCenter2: CGPoint = CGPointMake( centerLayerControlPoint.x , centerLayerControlPoint.y + distYBetnPoints * 0.40 )
                         
-                        var controlPointForLeftSide: CGPoint = CGPointMake(sideLayerControlPoint.x , sideLayerControlPoint.y + distYBetnPoints * 0.3)
-                        var controlPointForRightSide: CGPoint = CGPointMake(sideLayerControlPoint.x , destinationPointVertically.y - distYBetnPoints * 0.3)
+                        let controlPointForLeftSide: CGPoint = CGPointMake(sideLayerControlPoint.x , sideLayerControlPoint.y + distYBetnPoints * 0.3)
+                        let controlPointForRightSide: CGPoint = CGPointMake(sideLayerControlPoint.x , destinationPointVertically.y - distYBetnPoints * 0.3)
                         
                         path.moveToPoint(sideLayerControlPoint)
                         path.addCurveToPoint(centerLayerControlPoint, controlPoint1: controlPointForLeftSide, controlPoint2: controlPointForCenter1)
@@ -765,13 +765,13 @@ class MKFluidView: UIView {
                         
                         destinationPointVertically = CGPointMake( sideAnchorViewHolder!.x , sideAnchorViewHolder!.y + 2.0 * distYBetnPoints )
                         
-                        var distYBetnCenterAndMovingSidePoints: CGFloat = centerLayerControlPoint.y - sideLayerControlPoint.y
+                        let distYBetnCenterAndMovingSidePoints: CGFloat = centerLayerControlPoint.y - sideLayerControlPoint.y
                         
-                        var controlPointForCenter1: CGPoint = CGPointMake( centerLayerControlPoint.x , centerLayerControlPoint.y - distYBetnPoints * 0.30 )
-                        var controlPointForCenter2: CGPoint = CGPointMake( centerLayerControlPoint.x , centerLayerControlPoint.y + distYBetnPoints * 0.30 )
+                        let controlPointForCenter1: CGPoint = CGPointMake( centerLayerControlPoint.x , centerLayerControlPoint.y - distYBetnPoints * 0.30 )
+                        let controlPointForCenter2: CGPoint = CGPointMake( centerLayerControlPoint.x , centerLayerControlPoint.y + distYBetnPoints * 0.30 )
                         
                         var controlPointForLeftSide: CGPoint = CGPointMake(sideLayerControlPoint.x , sideLayerControlPoint.y + distYBetnCenterAndMovingSidePoints * 0.4)
-                        var controlPointForRightSide: CGPoint = CGPointMake(sideLayerControlPoint.x , centerLayerControlPoint.y + distYBetnCenterAndMovingSidePoints * 0.6)
+                        let controlPointForRightSide: CGPoint = CGPointMake(sideLayerControlPoint.x , centerLayerControlPoint.y + distYBetnCenterAndMovingSidePoints * 0.6)
                         
                         
                         path.moveToPoint(sideAnchorViewHolder!)
@@ -784,8 +784,8 @@ class MKFluidView: UIView {
                         
                         distYBetnPoints = centerLayerControlPoint.y - sideAnchorViewHolder!.y
                         destinationPointVertically = CGPointMake(sideAnchorViewHolder!.x , sideAnchorViewHolder!.y + 2.0 * distYBetnPoints)
-                        var controlPointForCenter1: CGPoint = CGPointMake( centerLayerControlPoint.x , sideAnchorViewHolder!.y + distYBetnPoints * 0.70 )
-                        var controlPointForCenter2: CGPoint = CGPointMake(centerLayerControlPoint.x , centerLayerControlPoint.y +  distYBetnPoints * 0.30)
+                        let controlPointForCenter1: CGPoint = CGPointMake( centerLayerControlPoint.x , sideAnchorViewHolder!.y + distYBetnPoints * 0.70 )
+                        let controlPointForCenter2: CGPoint = CGPointMake(centerLayerControlPoint.x , centerLayerControlPoint.y +  distYBetnPoints * 0.30)
                         
                         path.moveToPoint(sideAnchorViewHolder!)
                         path.addCurveToPoint(centerLayerControlPoint, controlPoint1: sideLayerControlPoint, controlPoint2: controlPointForCenter1)
@@ -793,12 +793,12 @@ class MKFluidView: UIView {
                         path.closePath()
                         
                     default:
-                        print("")
+                        print("", terminator: "")
                 }
             
             
             default:
-                print("Something wrong drawing Path")
+                print("Something wrong drawing Path", terminator: "")
             
         }
         
